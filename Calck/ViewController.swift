@@ -6,14 +6,29 @@
 //
 
 import UIKit
+import SnapKit
 
 class ViewController: UIViewController {
+    
+    let testView: UIView = {
+       let myView = UIView()
+        myView.backgroundColor = .orange
+        myView.translatesAutoresizingMaskIntoConstraints = false
+        return myView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .red
+        view.addSubview(testView)
+        testView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalToSuperview().inset(100)
+            
+        }
     }
-
+    
+    
 
 }
 
