@@ -88,8 +88,7 @@ class ViewController: UIViewController {
                 color = .buttonDarkColor
             }
             myStackView.addArrangedSubview(createButton(text: textSubView[i], color: color))
-        }
-        
+        }  
         return myStackView
     }
     
@@ -108,9 +107,6 @@ class ViewController: UIViewController {
         if let result = calculator.calculateOperation(operation: operation) {
             displayValue = result
         }
-        
-        
-        
     }
     
     @objc private func numButtonPressed(_ sender: UIButton) {
@@ -131,8 +127,6 @@ class ViewController: UIViewController {
             }
             displayLabel.text! += numValue
         }
-        
-        
     }
     
     // MARK: - Life Cycle

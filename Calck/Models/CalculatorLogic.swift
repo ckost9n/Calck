@@ -22,20 +22,11 @@ struct CalculatorLogic {
         guard let number = number else {
             return nil
         }
-        
-//        print(operation)
      
         switch operation {
         case .plusMinus: return number * -1
         case .ac: return 0
         case .percent: return number * 0.001
-        case .dot: return number * 0.001
-//        case .plus:
-            
-            
-//        case .minus: return number * 0.001
-//        case .del: return number * 0.001
-//        case .myltiply: return number * 0.001
         case .equal:
             return performTwoNumCalculation(num2: number)
         default:
@@ -52,23 +43,14 @@ struct CalculatorLogic {
               let operation = intermediateCalculation?.calcMethod else { return 0 }
         
         switch operation {
-        case .plus:
-            print(num1, operation, num2)
-            return num1 + num2
-        case .minus:
-            print(num1, operation, num2)
-            return num1 - num2
-        case .del:
-            print(num1, operation, num2)
-            return num1 / num2
-        case .myltiply:
-            print(num1, operation, num2)
-            return num1 * num2
+        case .plus: return num1 + num2
+        case .minus: return num1 - num2
+        case .del: return num1 / num2
+        case .myltiply: return num1 * num2
         default:
             fatalError("The operation passed in does not mathch any of the cases.")
         }
         
-//        return nil
     }
     
 }
