@@ -12,8 +12,8 @@ enum Constants: String {
     case dot = "."
     case ac = "AC"
     case plusMinus = "+/-"
-    case del = "%"
-    case percent = "÷"
+    case percent = "%"
+    case del = "÷"
     case myltiply = "×"
     case plus = "+"
     case minus = "-"
@@ -22,10 +22,14 @@ enum Constants: String {
 
 class ViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private var spacingButton: CGFloat = 10
     
     private var isFinishedTypingNumber = true
     private var isPointAdd = false
+    
+    private var calculator = CalculatorLogic()
     
     private var displayValue: Double {
         get {
@@ -38,6 +42,8 @@ class ViewController: UIViewController {
             displayLabel.text = String(newValue)
         }
     }
+    
+    // MARK: - Setup UI Elements
     
     private var mainStackView = UIStackView(views: [], axis: .vertical, spacing: 2)
     
@@ -74,7 +80,7 @@ class ViewController: UIViewController {
     private func createStackView(count: Int, textSubView: [String]) -> UIStackView {
         
         let myStackView = UIStackView(views: [], axis: .horizontal, spacing: spacingButton)
-        let ac = [Constants.ac.rawValue, Constants.plusMinus.rawValue, Constants.del.rawValue]
+        let ac = [Constants.ac.rawValue, Constants.plusMinus.rawValue, Constants.percent.rawValue]
         var color: UIColor
         for i in 0...count - 1 {
             color = (i == count - 1) ? .buttonOrangeColor : .buttonBlueColor
@@ -87,24 +93,24 @@ class ViewController: UIViewController {
         return myStackView
     }
     
+    // MARK: - Methods Actions with UI
+    
     @objc private func calcButtonPressed(_ sender: UIButton) {
         
         isFinishedTypingNumber = true
         isPointAdd = false
         
+        calculator.setNumber(displayValue)
         
-        guard let operationValue = sender.titleLabel?.text else { return }
-//        guard let resultStr = displayLabel.text,
-//              let firstNum = Double(resultStr) else { return }
-//        var secondNum = 0.0
-        
-        switch operationValue {
-        case Constants.plusMinus.rawValue: displayValue *= -1
-        case Constants.ac.rawValue: displayLabel.text = "0"
-        case Constants.del.rawValue: displayValue *= 0.001
-        default: break
+        guard let operationValue = sender.titleLabel?.text,
+              let operation: Constants = Constants(rawValue: operationValue) else { return }
+
+        if let result = calculator.calculateOperation(operation: operation) {
+            displayValue = result
         }
-//        displayLabel.text = secondNum == 0.0 ? "0" : String(secondNum)
+        
+        
+        
     }
     
     @objc private func numButtonPressed(_ sender: UIButton) {
@@ -128,6 +134,8 @@ class ViewController: UIViewController {
         
         
     }
+    
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,6 +145,8 @@ class ViewController: UIViewController {
 
     }
     
+    // MARK: - Setup Views
+    
     private func setupViews() {
         view.backgroundColor = .dispalayColor
         view.addSubview(mainStackView)
@@ -145,8 +155,8 @@ class ViewController: UIViewController {
         buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
             Constants.ac.rawValue,
             Constants.plusMinus.rawValue,
-            Constants.del.rawValue,
-            Constants.percent.rawValue
+            Constants.percent.rawValue,
+            Constants.del.rawValue
         ]))
         buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
             "7", "8", "9", Constants.myltiply.rawValue
@@ -172,6 +182,8 @@ class ViewController: UIViewController {
     }
 
 }
+
+// MARK: - Set Constraints
 
 extension ViewController {
     
