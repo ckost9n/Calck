@@ -24,7 +24,22 @@ class ViewController: UIViewController {
     
     private var spacingButton: CGFloat = 10
     
-    var mainStackView = UIStackView(views: [], axis: .vertical, spacing: 2)
+    private var isFinishedTypingNumber = true
+    private var isPointAdd = false
+    
+    private var displayValue: Double {
+        get {
+            guard let text = displayLabel.text,
+                  let textDouble = Double(text) else { return 0 }
+            
+            return textDouble
+        }
+        set {
+            displayLabel.text = String(newValue)
+        }
+    }
+    
+    private var mainStackView = UIStackView(views: [], axis: .vertical, spacing: 2)
     
     private lazy var buttonStackView = UIStackView(views: [], axis: .vertical, spacing: spacingButton)
     
@@ -41,16 +56,17 @@ class ViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 50, weight: .thin)
         label.textColor = .baseButtonColor
         label.text = "0"
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private func createButton(text: String, color: UIColor) -> UIButton {
         let myButton = UIButton(text: text, color: color)
-        if Int(text) != nil || text == "." {
-            myButton.addTarget(self, action: #selector(returnActionNum), for: .touchUpInside)
+        if Int(text) != nil || text == Constants.dot.rawValue {
+            myButton.addTarget(self, action: #selector(numButtonPressed), for: .touchUpInside)
         } else {
-            myButton.addTarget(self, action: #selector(returnActionCalc), for: .touchUpInside)
+            myButton.addTarget(self, action: #selector(calcButtonPressed), for: .touchUpInside)
         }
         return myButton
     }
@@ -58,7 +74,7 @@ class ViewController: UIViewController {
     private func createStackView(count: Int, textSubView: [String]) -> UIStackView {
         
         let myStackView = UIStackView(views: [], axis: .horizontal, spacing: spacingButton)
-        let ac = ["AC", "+/-", "%"]
+        let ac = [Constants.ac.rawValue, Constants.plusMinus.rawValue, Constants.del.rawValue]
         var color: UIColor
         for i in 0...count - 1 {
             color = (i == count - 1) ? .buttonOrangeColor : .buttonBlueColor
@@ -71,15 +87,45 @@ class ViewController: UIViewController {
         return myStackView
     }
     
-    @objc private func returnActionCalc(_ sender: UIButton) {
-        guard let text = sender.titleLabel?.text else { return }
-        print("Tap \(text)")
+    @objc private func calcButtonPressed(_ sender: UIButton) {
         
+        isFinishedTypingNumber = true
+        isPointAdd = false
+        
+        
+        guard let operationValue = sender.titleLabel?.text else { return }
+//        guard let resultStr = displayLabel.text,
+//              let firstNum = Double(resultStr) else { return }
+//        var secondNum = 0.0
+        
+        switch operationValue {
+        case Constants.plusMinus.rawValue: displayValue *= -1
+        case Constants.ac.rawValue: displayLabel.text = "0"
+        case Constants.del.rawValue: displayValue *= 0.001
+        default: break
+        }
+//        displayLabel.text = secondNum == 0.0 ? "0" : String(secondNum)
     }
     
-    @objc private func returnActionNum(_ sender: UIButton) {
-        guard let text = sender.titleLabel?.text else { return }
-        print("Tap \(text)")
+    @objc private func numButtonPressed(_ sender: UIButton) {
+        guard let numValue = sender.titleLabel?.text else { return }
+        
+        if isFinishedTypingNumber {
+            displayLabel.text = numValue
+            isFinishedTypingNumber = false
+        } else {
+            
+            if numValue == Constants.dot.rawValue {
+                
+                if isPointAdd {
+                    return
+                }
+                
+                isPointAdd = true
+            }
+            displayLabel.text! += numValue
+        }
+        
         
     }
 
