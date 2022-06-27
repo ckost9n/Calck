@@ -12,6 +12,7 @@ extension UIButton {
         var configuration = UIButton.Configuration.filled()
         configuration.baseForegroundColor = .baseButtonColor
         configuration.baseBackgroundColor = color
+        configuration.cornerStyle = .capsule
         
         var selfText = AttributeContainer()
         selfText.font = UIFont.systemFont(ofSize: 30, weight: .regular)
@@ -19,7 +20,7 @@ extension UIButton {
         
 //        self.init(configuration: configuration, primaryAction: action)
         self.init(configuration: configuration)
-        self.layer.cornerRadius = 0
+//        self.layer.cornerRadius = 0
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 }

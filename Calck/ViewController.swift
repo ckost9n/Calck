@@ -8,9 +8,25 @@
 import UIKit
 import SnapKit
 
+enum Constants: String {
+    case dot = "."
+    case ac = "AC"
+    case plusMinus = "+/-"
+    case del = "%"
+    case percent = "÷"
+    case myltiply = "×"
+    case plus = "+"
+    case minus = "-"
+    case equal = "="
+}
+
 class ViewController: UIViewController {
     
+    private var spacingButton: CGFloat = 10
+    
     var mainStackView = UIStackView(views: [], axis: .vertical, spacing: 2)
+    
+    private lazy var buttonStackView = UIStackView(views: [], axis: .vertical, spacing: spacingButton)
     
     private let displayView: UIView = {
        let myView = UIView()
@@ -41,11 +57,11 @@ class ViewController: UIViewController {
     
     private func createStackView(count: Int, textSubView: [String]) -> UIStackView {
         
-        let myStackView = UIStackView(views: [], axis: .horizontal, spacing: 2)
-        let ac = ["AC", "+/-", "%", "÷"]
-        
+        let myStackView = UIStackView(views: [], axis: .horizontal, spacing: spacingButton)
+        let ac = ["AC", "+/-", "%"]
+        var color: UIColor
         for i in 0...count - 1 {
-            var color = (i == count - 1) ? UIColor.buttonOrangeColor : UIColor.buttonBlueColor
+            color = (i == count - 1) ? .buttonOrangeColor : .buttonBlueColor
             if ac.contains(textSubView[i]) {
                 color = .buttonDarkColor
             }
@@ -66,16 +82,6 @@ class ViewController: UIViewController {
         print("Tap \(text)")
         
     }
-    
-    private var calcButtonPressed = UIAction(handler: { action in
-        print("TAP CALC")
-    })
-    
-    
-    
-    private var numButtonPressed = UIAction(handler: { action in
-        print("TAP NUM")
-    })
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,28 +95,34 @@ class ViewController: UIViewController {
         view.backgroundColor = .dispalayColor
         view.addSubview(mainStackView)
         displayView.addSubview(displayLabel)
-        mainStackView.addArrangedSubview(displayView)
-        mainStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
-            "AC", "+/-", "%", "÷"
+        
+        buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
+            Constants.ac.rawValue,
+            Constants.plusMinus.rawValue,
+            Constants.del.rawValue,
+            Constants.percent.rawValue
         ]))
-        mainStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
-            "7", "8", "9", "×"
+        buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
+            "7", "8", "9", Constants.myltiply.rawValue
         ]))
-        mainStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
-            "4", "5", "6", "-"
+        buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
+            "4", "5", "6", Constants.minus.rawValue
         ]))
-        mainStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
-            "1", "2", "3", "+"
+        buttonStackView.addArrangedSubview(createStackView(count: 4, textSubView: [
+            "1", "2", "3", Constants.plus.rawValue
         ]))
         let dotEualView = createStackView(count: 2, textSubView: [
-            ".", "="
+            Constants.dot.rawValue, Constants.equal.rawValue
         ])
-        let dounStackView = UIStackView(views: [
+        let douwnStackView = UIStackView(views: [
             createButton(text: "0", color: .buttonBlueColor),
             dotEualView
-        ], axis: .horizontal, spacing: 2)
-        mainStackView.addArrangedSubview(dounStackView)
+        ], axis: .horizontal, spacing: spacingButton)
+        buttonStackView.addArrangedSubview(douwnStackView)
         
+        mainStackView.addArrangedSubview(displayView)
+        mainStackView.addArrangedSubview(buttonStackView)
+        mainStackView.distribution = .fillProportionally
     }
 
 }
@@ -118,15 +130,21 @@ class ViewController: UIViewController {
 extension ViewController {
     
     private func setContstraints() {
+        
         mainStackView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).inset(10)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).inset(10)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
+        
         displayLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(10)
+        }
+        
+        displayView.snp.makeConstraints { make in
+            make.height.equalTo(self.mainStackView.snp.height).multipliedBy(0.4)
         }
     }
     

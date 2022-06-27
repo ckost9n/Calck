@@ -46,14 +46,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3C543BF42868DBB100BCB31D /* Extension */ = {
+		3C543BF42868DBB100BCB31D /* Extension + Helper */ = {
 			isa = PBXGroup;
 			children = (
 				3C543BF02868D96900BCB31D /* UIStackView + Extension.swift */,
 				3C543BF22868DAF100BCB31D /* UIColor + Extension.swift */,
 				3C543BF52868DC1500BCB31D /* UIButton + Extension.swift */,
 			);
-			path = Extension;
+			path = "Extension + Helper";
 			sourceTree = "<group>";
 		};
 		3CB930092860AAD0005B16C0 = {
@@ -80,7 +80,7 @@
 				3CB930152860AAD0005B16C0 /* AppDelegate.swift */,
 				3CB930172860AAD0005B16C0 /* SceneDelegate.swift */,
 				3CB930192860AAD0005B16C0 /* ViewController.swift */,
-				3C543BF42868DBB100BCB31D /* Extension */,
+				3C543BF42868DBB100BCB31D /* Extension + Helper */,
 				3CB9301E2860AAD7005B16C0 /* Assets.xcassets */,
 				3CB930202860AAD7005B16C0 /* LaunchScreen.storyboard */,
 				3CB930232860AAD7005B16C0 /* Info.plist */,
